@@ -1,5 +1,6 @@
 from app import db
 from models.cuenta import Cuenta
+from models.persona import Persona
 import jwt
 from flask import Flask, request, jsonify, make_response, current_app
 from flask_sqlalchemy import SQLAlchemy

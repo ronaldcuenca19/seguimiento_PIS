@@ -22,9 +22,8 @@ schema_nota = {
     'properties': {
         'id_unidad': {'type': 'string'},
         'id_materia': {'type': 'string'},
-        'id_alumno': {'type': 'string'},
     },
-    'required': ['id_unidad', 'id_materia', 'id_alumno']
+    'required': ['id_unidad', 'id_materia']
 }
 
 schema_informe_nota = {
@@ -84,6 +83,18 @@ def createNota():
             200,
         )
     
+
+@api_nota.route('/nota/update', methods=["POST"])
+@token_required
+@expects_json(schema_nota)
+def updateNota():
+    data = request.json
+    nota_id = notaC.EditarNota(data)
+    return make_response(
+        jsonify({"msg":"OK", "code":200, "data": nota_id}),
+        200,
+    )
+    
 @api_nota.route('/informe_nota/save', methods=["POST"])
 @token_required
 @expects_json(schema_informe_nota)
@@ -129,10 +140,46 @@ def listNota():
         200
     )
 
+@api_nota.route("/nota/<external>", methods=["GET"])
+@token_required
+def listNota_Detalle(external):
+    datos_nota = notaC.listarNotaDetalle(external)
+    
+    return make_response(
+        jsonify({"msg": "OK", "code": 200, "datos":([i.serialize() for i in datos_nota])}),
+        200
+    )
+
 @api_nota.route("/informe_nota", methods=["GET"])
 @token_required
 def listInforNota():
     datos_informe_nota = notaC.listarInformeNota()
+    
+    return make_response(
+        jsonify({"msg": "OK", "code": 200, "datos":([i.serialize() for i in datos_informe_nota])}),
+        200
+    )
+
+@api_nota.route("/nota/delete/<external>/<valor>", methods=["DELETE"])
+@token_required
+def borrarNota(external, valor):
+    datos_nota = notaC.EliminarNotas(external, valor)
+    
+    if datos_nota is None:
+        return make_response(
+            jsonify({"msg": "Notas no encontradas", "code": 405}),
+            405
+        )
+
+    return make_response(
+        jsonify({"msg": "Notas eliminadas correctamente", "code": 200}),
+        200
+    )
+
+@api_nota.route("/nota_unidad_materia/<external>/<valor>", methods=["GET"])
+@token_required
+def listNotaUnidadMateria(external, valor):
+    datos_informe_nota = notaC.listar_Notas_Materia_Unidad(external, valor)
     
     return make_response(
         jsonify({"msg": "OK", "code": 200, "datos":([i.serialize() for i in datos_informe_nota])}),

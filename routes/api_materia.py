@@ -95,6 +95,15 @@ def listMateria():
         200
     )
 
+@api_materia.route("/materia/<external>", methods=["GET"])
+def listMateriaDocente(external):
+    datos_materia = materiaC.listarMateria_Docente(external)
+    
+    return make_response(
+        jsonify({"msg": "OK", "code": 200, "datos":([i.serialize() for i in datos_materia])}),
+        200
+    )
+
 @api_materia.route("/partir_materia", methods=["GET"])
 def listPartirMateria():
     datos_partirmateria = materiaC.listarPartir_Materia()

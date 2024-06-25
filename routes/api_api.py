@@ -111,7 +111,6 @@ def session():
         )
 
 @api_api.route('/persona/save/admin', methods=["POST"])
-@token_required
 @expects_json(schema)
 def create():
     data = request.json
@@ -130,7 +129,6 @@ def create():
         )
 
 @api_api.route('/persona/save/docente', methods=["POST"])
-@token_required
 @expects_json(schema)
 def create_docente():
     data = request.json

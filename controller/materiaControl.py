@@ -3,7 +3,6 @@ from models.rol import Rol
 from models.partir_materia import Partir_Materia
 from models.cuenta import Cuenta
 from models.curso import Curso
-from models.matricula import Matricula
 from models.asignatura import Asignatura
 from models.periodo import Periodo
 from app import db
@@ -68,6 +67,10 @@ class MateriaControl:
     
     def listarMateria(self):
         return Asignatura.query.all()
+    
+    def listarMateria_Docente(self, external):
+        profesor2 = Persona.query.filter_by(external_id=external).first()
+        return Asignatura.query.filter_by(nombre_profesor=profesor2.nombre + '' + profesor2.apellido).all()
     
     def listarPartir_Materia(self):
         return Partir_Materia.query.all()

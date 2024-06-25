@@ -7,7 +7,6 @@ from models.asignatura import Asignatura
 from models.informe_nota import Informe_Nota
 from models.unidad import Unidad
 from models.curso import Curso
-from models.matricula import Matricula
 from models.periodo import Periodo
 from app import db
 from sqlalchemy.exc import IntegrityError
@@ -39,7 +38,9 @@ class PersonaControl:
                 person = accountA.getPerson(accountA.id_persona)
                 user_info = {
                     "token": token,
-                    "user": person.apellido + " " + person.nombre
+                    "user": person.apellido + " " + person.nombre,
+                    "external": person.external_id,
+                    "rol": person.rol.nombre
                 }
                 return user_info
             else:
